@@ -28,15 +28,22 @@ namespace TheApp.Controllers
             return View(viewModel);
         }
 
-        [Route("movies/released/{year}/{month}")]
-        public ActionResult Edit(int year, int month)
+        public ActionResult Index()
         {
-            return Content(year + "/" + month);
-        }
+            var movie = new Movie() { Name = "Yahia" };
+            var customers = new List<Customer>
+            {
+                new Customer {Name="Yahia" },
+                new Customer {Name="Ahmed" },
+                new Customer {Name="Mohamed" },
+            };
 
-        public ActionResult Index(int? pageIndex = 1, string sortBy = "Name")
-        {
-            return Content(pageIndex + " " + sortBy);
+            var viewModel = new RandomMovieViewModel
+            {
+                Movie = movie,
+                Customers = customers
+            };
+            return View(viewModel);
         }
     }
 }
