@@ -10,40 +10,27 @@ namespace TheApp.Controllers
 {
     public class MoviesController : Controller
     {
-        // GET: Movies/Random
-        public ActionResult Random()
+        private ApplicationDbContext _ctx;
+        public MoviesController()
         {
-            var movie = new Movie() { Name = "Yahia" };
-            var customers = new List<Customer>
-            {
-                new Customer {Name="Yahia" },
-                new Customer {Name="Ahmed" },
-                new Customer {Name="Mohamed" },
-            };
-
-            var viewModel = new RandomMovieViewModel
-            {
-                Movie = movie, Customers = customers
-            };
-            return View(viewModel);
+            _ctx = new ApplicationDbContext();
         }
-
         public ActionResult Index()
         {
-            var movie = new Movie() { Name = "Yahia" };
-            var customers = new List<Customer>
-            {
-                new Customer {Name="Yahia" },
-                new Customer {Name="Ahmed" },
-                new Customer {Name="Mohamed" },
-            };
+            var movies = _ctx.Movies.Include("Genre").ToList();
+            return View(movies);
+        }
 
-            var viewModel = new RandomMovieViewModel
-            {
-                Movie = movie,
-                Customers = customers
-            };
-            return View(viewModel);
+        public ActionResult Save()
+        {
+            return View();
+        }
+
+        public ActionResult Details(int id)
+        {
+            var movie = _ctx.Movies.Include("Genre").SingleOrDefault(u => u.Id == id);
+            if (movie == null) return HttpNotFound();
+            return View(movie);
         }
     }
 }
