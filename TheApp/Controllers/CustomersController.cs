@@ -27,10 +27,9 @@ namespace TheApp.Controllers
         // New customer form
         public ActionResult New()
         {
-            var membershipTypes = _ctx.MembershipTypes.ToList();
             var viewModel = new CustomerFormViewModel
             {
-                MembershipType = membershipTypes
+                MembershipType = _ctx.MembershipTypes.ToList()
             };
             return View("CustomerForm", viewModel);
         }
@@ -39,6 +38,16 @@ namespace TheApp.Controllers
         [HttpPost]
         public ActionResult Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipType = _ctx.MembershipTypes.ToList()
+                };
+                return View("CustomerForm", viewModel);
+            }
+
             if (customer.Id == 0)
                 _ctx.Customers.Add(customer);
             else
