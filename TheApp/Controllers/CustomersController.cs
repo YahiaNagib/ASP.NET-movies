@@ -29,6 +29,7 @@ namespace TheApp.Controllers
         {
             var viewModel = new CustomerFormViewModel
             {
+                Customer = new Customer(),
                 MembershipType = _ctx.MembershipTypes.ToList()
             };
             return View("CustomerForm", viewModel);
@@ -36,6 +37,7 @@ namespace TheApp.Controllers
 
         // Post request to create a new user
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
             if (!ModelState.IsValid)
